@@ -36,7 +36,7 @@
         <input type="text" class="form-control" id="disponibilidad" name="disponibilidad" placeholder="Ej. Lunes y Miércoles, 15:00 - 17:00" required>
       </div>
       <button type="submit" class="btn btn-primary">Registrarse</button>
-      <button type="/listado.html" class="btn btn-primary">Registrarse</button>
+      <button id= "listado" class="btn btn-primary">Listado</button>
     </form>
 
     <div id="responseMessage" class="mt-3"></div>
@@ -71,6 +71,9 @@
           console.error('Error:', error);
           document.getElementById('responseMessage').innerText = 'Error registrando el voluntario.';
       });
+    });
+    document.getElementById("listado").addEventListener("click", function() {
+        window.location.href = "listado.html";
     });
   </script>
 </body>
