@@ -1,0 +1,16 @@
+{
+  "name": "platformpsu",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "Plataforma de registro de voluntarios para la acción solidaria.",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
