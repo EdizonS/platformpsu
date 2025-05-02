@@ -13,5 +13,14 @@
   "dependencies": {
     "express": "^5.1.0",
     "mongoose": "^8.14.1"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EdizonS/platformpsu.git"
+  },
+  "bugs": {
+    "url": "https://github.com/EdizonS/platformpsu/issues"
+  },
+  "homepage": "https://github.com/EdizonS/platformpsu#readme"
 }

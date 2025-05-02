@@ -51,6 +51,18 @@ app.post('/register', async (req, res) => {
   }
 });
 
+// Endpoint para obtener todos los voluntarios registrados
+app.get('/volunteers', async (req, res) => {
+  try {
+    // Consulta todos los documentos de la colección
+    const allVolunteers = await Volunteer.find({});
+    res.json(allVolunteers);
+  } catch (err) {
+    console.error("Error al obtener voluntarios:", err);
+    res.status(500).json({ message: 'Error al recuperar los voluntarios' });
+  }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);

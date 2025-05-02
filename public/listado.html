@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Consulta de Registros de Voluntarios</title>
+  <!-- Usamos Bootstrap para un estilo básico -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <h1 class="mt-4">Registros de Voluntarios</h1>
+    <table class="table table-bordered" id="volunteersTable">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Nombre</th>
+          <th>Profesión</th>
+          <th>Email</th>
+          <th>Disponibilidad</th>
+          <th>Fecha de Registro</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Aquí se inyectarán los registros -->
+      </tbody>
+    </table>
+  </div>
+  
+  <script>
+    // Función para cargar los datos desde el endpoint /volunteers
+    async function loadVolunteers() {
+      try {
+        const response = await fetch('/volunteers');
+        const data = await response.json();
+        const tbody = document.querySelector('#volunteersTable tbody');
+        tbody.innerHTML = '';
+
+        data.forEach((volunteer, index) => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${volunteer.nombre}</td>
+            <td>${volunteer.profesion}</td>
+            <td>${volunteer.email}</td>
+            <td>${volunteer.disponibilidad}</td>
+            <td>${new Date(volunteer.registeredAt).toLocaleString()}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      } catch (error) {
+        console.error('Error cargando los datos:', error);
+      }
+    }
+    
+    // Ejecuta la función cuando la ventana haya cargado completamente
+    window.onload = loadVolunteers;
+  </script>
+</body>
+</html>
