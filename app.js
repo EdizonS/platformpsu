@@ -56,6 +56,7 @@ app.get('/volunteers', async (req, res) => {
   try {
     // Consulta todos los documentos de la colección
     const allVolunteers = await Volunteer.find({});
+    // console.log("Voluntarios encontrados:", allVolunteers);
     res.json(allVolunteers);
   } catch (err) {
     console.error("Error al obtener voluntarios:", err);
