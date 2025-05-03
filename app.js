@@ -60,7 +60,7 @@ app.get('/volunteers', async (req, res) => {
     res.json(allVolunteers);
   } catch (err) {
     console.error("Error al obtener voluntarios:", err);
-    res.status(500).json({ message: 'Error al recuperar los voluntarios' });
+    res.status(500).json({ message: 'Error al recuperar los voluntarios' + err.message });
   }
 });
 
