@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Solicitud de Programación</title>
+</head>
+<body>
+  <h1>Solicitud de Programación</h1>
+  <form id="solicitudForm" method="POST" action="/CommunityRequest">
+    <label>Nombre:</label><br>
+    <input type="text" name="nombre" required><br><br>
+    
+    <label>Apellido:</label><br>
+    <input type="text" name="apellido" required><br><br>
+    
+    <label>Teléfono:</label><br>
+    <input type="text" name="telefono" required><br><br>
+    
+    <label>Correo:</label><br>
+    <input type="email" name="correo" required><br><br>
+    
+    <label>Selecciona al Voluntario:</label><br>
+    <select name="voluntarioEmail" id="voluntarioSelect" required>
+      <!-- Las opciones se cargarán dinámicamente con los voluntarios registrados -->
+    </select>
+    <br><br>
+    
+    <label>Mensaje (¿Por qué requieres al profesional?):</label><br>
+    <textarea name="mensaje" rows="4" cols="50" required></textarea><br><br>
+    
+    <button type="submit">Enviar Solicitud</button>
+  </form>
+
+  <script>
+    async function loadVolunteers() {
+      try {
+        const response = await fetch('/volunteers');
+        const data = await response.json();
+        const select = document.getElementById('voluntarioSelect');
+        data.forEach(volunteer => {
+          const option = document.createElement('option');
+          option.value = volunteer.email;  // Utilizamos el correo del voluntario para notificarlo
+          option.textContent = `${volunteer.nombre} - ${volunteer.profesion}`;
+          select.appendChild(option);
+        });
+      } catch (error) {
+        console.error("Error al cargar voluntarios:", error);
+      }
+    }
+    window.onload = loadVolunteers;
+  </script>
+</body>
+</html>
