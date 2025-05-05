@@ -126,7 +126,8 @@ app.post('/CommunityRequest', async (req, res) => {
     const infoVoluntario = await transporter.sendMail(mailOptionsVoluntario);
     
     console.log("Emails enviados:", infoSolicitante.response, infoVoluntario.response);
-    return res.status(200).json({ message: 'Solicitud enviada correctamente.' });
+    // return res.status(200).json({ message: 'Solicitud enviada correctamente.' });
+    return res.redirect('/ThanksRequest.html');
   } catch (err) {
     console.error("Error al enviar emails:", err);
     return res.status(500).json({ message: 'Error al enviar la solicitud.' });
