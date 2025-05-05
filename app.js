@@ -1,19 +1,20 @@
 // app.js
 const express = require('express');
 const mongoose = require('mongoose');  // Importar mongoose
-
 const app = express();
+
+require('dotenv').config(); // Cargar variables de entorno
+const uri = process.env.MONGODB_URI;
+
+// Conectar a MongoDB Atlas a través de Mongoose
+mongoose.connect(uri)
+  .then(() => console.log("Conexión exitosa a MongoDB Atlas"))
+  .catch(error => console.error("Error al conectar a MongoDB Atlas:", error));
 
 // Configurar middleware para parsear el json
 app.use(express.json());
 // Servir archivos estáticos (por ejemplo, index.html) desde la carpeta "public"
 app.use(express.static('public'));
-
-// Conectar a MongoDB Atlas a través de Mongoose
-const uri = "mongodb+srv://edizonsalguero97:Killerqueen_1@cluster0.dhohri8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-mongoose.connect(uri)
-.then(() => console.log("Conexión exitosa a MongoDB Atlas"))
-.catch((error) => console.error("Error al conectar a MongoDB Atlas:", error));
 
 /*
     Definir el esquema y modelo para los voluntarios
