@@ -9,6 +9,7 @@
 /* Estilos generales */
 body {
     font-family: 'Arial', sans-serif;
+    text-align: center;
     background-color: var(--background-color);
     color: var(--primary-color);
     margin: 0;
