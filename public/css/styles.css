@@ -1,0 +1,113 @@
+/* Variables de colores */
+:root {
+    --primary-color: #5171a4;
+    --secondary-color: #cca6c7;
+    --background-color: #b8c9e0;
+    --text-color: #ffffff;
+}
+
+/* Estilos generales */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: var(--background-color);
+    color: var(--primary-color);
+    margin: 0;
+    padding: 0;
+}
+
+/* Contenedor principal */
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+    background: var(--text-color);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Contenedor principal centrado */
+.container-center {
+    max-width: 600px; /* Ajusta según el diseño */
+    margin: 50px auto; /* Centrado vertical y horizontal */
+    padding: 20px;
+    background-color: #ffffff; /* Fondo blanco */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Ajuste para pantallas pequeñas */
+@media (max-width: 768px) {
+    .container-center {
+        width: 90%;
+        margin: 30px auto;
+    }
+}
+
+/* Botones */
+button, .btn {
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    padding: 12px 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover, .btn:hover {
+    background-color: var(--secondary-color);
+}
+
+/* Formularios */
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 2px solid var(--primary-color);
+    border-radius: 5px;
+}
+
+/* Breadcrumbs */
+.breadcrumb {
+    background: var(--secondary-color);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.breadcrumb a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+/* Tabla de Voluntarios */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid var(--secondary-color);
+}
+
+th {
+    background-color: var(--primary-color);
+    color: var(--text-color);
+}
+
+/* Diseño responsivo */
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+        padding: 15px;
+    }
+    
+    button {
+        width: 100%;
+    }
+    
+    table {
+        font-size: 14px;
+    }
+}

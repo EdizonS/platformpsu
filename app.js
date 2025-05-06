@@ -27,7 +27,12 @@ const volunteerSchema = new mongoose.Schema({
   nombre: String,
   profesion: String,
   email: String,
-  disponibilidad: String,
+  disponibilidad: [
+    {
+      dia: String,
+      horas: String
+    }
+  ],
   registeredAt: { type: Date, default: Date.now }
 });
 
@@ -38,9 +43,11 @@ const Volunteer = mongoose.model('Volunteer', volunteerSchema);
 app.post('/register', async (req, res) => {
   try {
     // console.log("Datos recibidos:", req.body); // Para depuración
-    const { nombre, profesion, email, disponibilidad } = req.body;
+    const disponibilidad = JSON.parse(req.body.disponibilidad);
+
+    const { nombre, profesion, email } = req.body;
     // Validación básica
-    if (!nombre || !profesion || !email || !disponibilidad) {
+    if (!nombre || !profesion || !email || !disponibilidad.length) {
       return res.status(400).json({ message: 'Todos los campos son obligatorios.' });
     }
     // Crear y guardar un nuevo voluntario
@@ -68,6 +75,19 @@ app.get('/volunteers', async (req, res) => {
   }
 });
 
+// Endpoint para listar todos los voluntarios registrados
+app.get('/volunteer/:email', async (req, res) => {
+  try {
+    const voluntario = await Volunteer.findOne({ email: req.params.email });
+    if (!voluntario) {
+      return res.status(404).json({ message: 'Voluntario no encontrado' });
+    }
+    res.json(voluntario);
+  } catch (error) {
+    res.status(500).json({ message: 'Error al obtener datos del voluntario' });
+  }
+});
+
 /* Endpoint: Solicitud de programación entre comunidad y voluntarios
  El formulario debe envíar:
     - nombre, apellido, telefono, correo, mensaje
@@ -83,11 +103,12 @@ const transporter = nodemailer.createTransport({
   }
 });
 app.post('/CommunityRequest', async (req, res) => {
-  const { nombre, apellido, telefono, correo, mensaje, voluntarioEmail } = req.body;
-  // Validar que todos los datos estén presentes
-  if (!nombre || !apellido || !telefono || !correo || !mensaje || !voluntarioEmail) {
-    return res.status(400).json({ message: 'Todos los campos son obligatorios.' });
-  }
+  const { nombre, apellido, telefono, correo, mensaje, voluntarioEmail, horariosSeleccionados } = req.body;
+    // Validar que todos los datos estén presentes
+    if (!nombre || !apellido || !telefono || !correo || !mensaje || !voluntarioEmail || !horariosSeleccionados) {
+      return res.status(400).json({ message: 'Todos los campos son obligatorios.' });
+    }
+
   // Configurar correo para el solicitante
   const mailOptionsSolicitante = {
     from: process.env.EMAIL_USER,

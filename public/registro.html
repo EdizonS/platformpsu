@@ -5,12 +5,21 @@
   <title>PencalConFuturo - Registro de Voluntarios</title>
   <!-- Usamos Bootstrap CDN para un estilo básico -->
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <!-- Agregamos la librería de Flatpickr para -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 </head>
 <body>
-  <div class="container">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Registro de Voluntarios</li>
+    </ol>
+  </nav>
+  <div class="container-center">
     <h1 class="mt-5">Plataforma Digital - Registro de Voluntarios</h1>
     <p>Únete para brindar servicios (tutorías, talleres, jornadas de salud) en la Biblioteca Armonía de Usca.</p>
-    
     <!-- Formulario de registro -->
     <form id="volunteerForm" method="POST" action="/register">
       <div class="form-group">
@@ -30,13 +39,54 @@
         <label for="email">Correo Electrónico:</label>
         <input type="email" class="form-control" id="email" name="email" placeholder="correo@ejemplo.com" required>
       </div>
+      <!-- Aqui se seleccionaran los días -->
       <div class="form-group">
-        <label for="disponibilidad">Disponibilidad (días/horas):</label>
-        <input type="text" class="form-control" id="disponibilidad" name="disponibilidad" placeholder="Ej. Lunes y Miércoles, 15:00 - 17:00" required>
+        <label for="disponibilidad">Selecciona los días disponibles:</label>
+        <input type="text" id="diasDisponibles" class="form-control" placeholder="Selecciona múltiples días">
       </div>
+      <div class="form-group">
+        <label>Horario de disponibilidad:</label>
+        <input type="time" id="horaInicio" class="form-control">
+        <input type="time" id="horaFin" class="form-control">
+      </div>
+      <button type="button" id="agregarDisponibilidad" class="btn btn-secondary">Agregar Disponibilidad</button>
+      <!-- Aquí se mostrarán los días y horarios agregados -->
+      <ul id="listaDisponibilidad"></ul>
+      <!-- Campo oculto para enviar los datos correctamente -->
+      <input type="hidden" id="disponibilidadInput" name="disponibilidad">
       <button type="submit" class="btn btn-primary">Registrarse</button>
-      <button id= "listado" class="btn btn-primary">Listado</button>
     </form>
   </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+    // Inicializar Flatpickr para seleccionar múltiples días
+    flatpickr("#diasDisponibles", {
+      mode: "multiple",
+      dateFormat: "Y-m-d",
+      altInput: true,
+      altFormat: "F j, Y",
+    });
+    // Array para almacenar disponibilidad
+    let disponibilidad = [];
+    // Función para agregar fechas y horarios seleccionados
+    document.getElementById("agregarDisponibilidad").addEventListener("click", function () {
+      const diasSeleccionados = document.getElementById("diasDisponibles").value.split(", ");
+      const horaInicio = document.getElementById("horaInicio").value;
+      const horaFin = document.getElementById("horaFin").value;
+      if (diasSeleccionados.length === 0 || !horaInicio || !horaFin) {
+        alert("Por favor selecciona los días y el rango de horas.");
+        return;
+      }
+      diasSeleccionados.forEach(dia => {
+        disponibilidad.push({ dia, horas: `${horaInicio} - ${horaFin}` });
+        const item = document.createElement("li");
+        item.textContent = `${dia}: ${horaInicio} - ${horaFin}`;
+        document.getElementById("listaDisponibilidad").appendChild(item);
+      });
+      // Guardar en el campo oculto para enviar correctamente
+      document.getElementById("disponibilidadInput").value = JSON.stringify(disponibilidad);
+    });
+  });
+  </script>  
 </body>
 </html>
