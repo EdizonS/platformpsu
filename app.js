@@ -4,6 +4,10 @@ const mongoose = require('mongoose');  // Importar mongoose
 const nodemailer = require('nodemailer');  // Importar NodeMailer
 const app = express();
 
+// Configurar EJS como el motor de plantillas para el head-footer y demas plantillas 
+app.set('view engine', 'ejs');
+app.set('views', __dirname + '/views');
+
 require('dotenv').config(); // Cargar las variables de entorno
 const uri = process.env.MONGODB_URI;
 
@@ -16,8 +20,34 @@ mongoose.connect(uri)
 app.use(express.json());
 // Agregar middleware para parsear datos de formularios URL-encoded
 app.use(express.urlencoded({ extended: true }));
-// Servir archivos estáticos (por ejemplo el index.html) desde la carpeta "public"
+// Servir archivos estáticos (por ejemplo el index)
 app.use(express.static('public'));
+
+// AQUI SE DEFINEN las rutas para las vistas
+app.get('/', (req, res) => {
+  res.render('index');
+});
+
+app.get('/registro', (req, res) => {
+  res.render('registro');
+});
+
+app.get('/listado', (req, res) => {
+  res.render('listado');
+});
+
+app.get('/solicitud', (req, res) => {
+  res.render('solicitud');
+});
+
+app.get('/thanks-register', (req, res) => {
+  res.render('thanksRegister');
+});
+
+app.get('/thanks-request', (req, res) => {
+  res.render('thanksRequest');
+});
+
 
 /*
     Definir el esquema y modelo para los voluntarios
@@ -43,6 +73,7 @@ const Volunteer = mongoose.model('Volunteer', volunteerSchema);
 app.post('/register', async (req, res) => {
   try {
     // console.log("Datos recibidos:", req.body); // Para depuración
+    // Convertirmos la disponibilidad a un array de objetos
     const disponibilidad = JSON.parse(req.body.disponibilidad);
 
     const { nombre, profesion, email } = req.body;
@@ -55,7 +86,7 @@ app.post('/register', async (req, res) => {
     await newVolunteer.save();
     console.log(`Registro Guardado: ${newVolunteer}`);
     // return res.status(201).json({ message: 'Registro exitoso, ¡gracias por colaborar!' });
-    return res.redirect('/ThanksRegister.html');
+    return res.redirect('/ThanksRegister');
   } catch (error) { // Aqui atrapamos el error, y lo enviamos al front
     console.error("Error registrando voluntario:", error);
     return res.status(500).json({ message: 'Error al registrar voluntario'});
@@ -148,7 +179,7 @@ app.post('/CommunityRequest', async (req, res) => {
     
     console.log("Emails enviados:", infoSolicitante.response, infoVoluntario.response);
     // return res.status(200).json({ message: 'Solicitud enviada correctamente.' });
-    return res.redirect('/ThanksRequest.html');
+    return res.redirect('/ThanksRequest');
   } catch (err) {
     console.error("Error al enviar emails:", err);
     return res.status(500).json({ message: 'Error al enviar la solicitud.' });

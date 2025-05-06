@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <title>Consulta de Registros de Voluntarios</title>
+  <%- include('partials/head'); %>
+</head>
+<body>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Listado de Voluntario</li>
+  </ol>
+</nav>
+  <div class="container-center">
+    <h1 class="mt-4">Registros de Voluntarios</h1>
+    <div class="table-responsive">
+      <table class="display" id="volunteersTable">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Profesión</th>
+            <th>Email</th>
+            <th>Disponibilidad</th>
+            <th>Fecha de Registro</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Aquí se iran creando los registros dinamicamente -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  <script>
+    // Función para cargar los datos desde el endpoint /volunteers
+    async function loadVolunteers() {
+      try {
+        const response = await fetch('/volunteers');
+        const data = await response.json();
+        const tbody = document.querySelector('#volunteersTable tbody');
+        tbody.innerHTML = '';
+
+        data.forEach((volunteer, index) => {
+          let TextoDisponibilidad = volunteer.disponibilidad.map(slot => `${slot.dia}: ${slot.horas}`);
+          // Mostrar solo los primeros 2 horarios
+          let limitedAvailability = TextoDisponibilidad.slice(0, 2).join('<br>');
+          let fullAvailability = TextoDisponibilidad.join('<br>');
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${volunteer.nombre}</td>
+            <td>${volunteer.profesion}</td>
+            <td>${volunteer.email}</td>
+            <td>
+              <div class="availability-preview">${limitedAvailability}</div>
+              <div class="availability-full" style="display: none;">${fullAvailability}</div>
+              ${TextoDisponibilidad.length > 2 ? '<button class="toggle-btn">Ver más</button>' : ''}
+            </td>
+            <td>${new Date(volunteer.registeredAt).toLocaleString()}</td>
+          `;
+          tbody.appendChild(row);
+        });
+
+        // Agregar funcionalidad a los botones "Ver más / Ver menos"
+        document.querySelectorAll('.toggle-btn').forEach(button => {
+          button.addEventListener('click', function () {
+            const parentCell = this.parentElement;
+            const preview = parentCell.querySelector('.availability-preview');
+            const full = parentCell.querySelector('.availability-full');
+
+            if (preview.style.display === 'none') {
+              preview.style.display = 'block';
+              full.style.display = 'none';
+              this.textContent = 'Ver más';
+            } else {
+              preview.style.display = 'none';
+              full.style.display = 'block';
+              this.textContent = 'Ver menos';
+            }
+          });
+        });
+
+        // Iniciar DataTables después de cargar los datos
+        $('#volunteersTable').DataTable({
+          paging: true,
+          searching: true,
+          ordering: true,
+          responsive: true,
+          language: {
+            url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/Spanish.json'
+          }
+        });
+      } catch (error) {
+        console.error('Error cargando los datos:', error);
+      }
+    }
+    
+    // Ejecuta la función cuando la ventana haya cargado completamente
+    window.onload = loadVolunteers;
+  </script>
+  <%- include('partials/footer'); %>
+</body>
+</html>
