@@ -40,12 +40,12 @@ app.get('/solicitud', (req, res) => {
   res.render('solicitud');
 });
 
-app.get('/thanks-register', (req, res) => {
-  res.render('thanksRegister');
+app.get('/ThanksRegister', (req, res) => {
+  res.render('ThanksRegister');
 });
 
-app.get('/thanks-request', (req, res) => {
-  res.render('thanksRequest');
+app.get('/ThanksRequest', (req, res) => {
+  res.render('ThanksRequest');
 });
 
 
@@ -72,7 +72,7 @@ const Volunteer = mongoose.model('Volunteer', volunteerSchema);
 // Endpoint para registrar un voluntario
 app.post('/register', async (req, res) => {
   try {
-    // console.log("Datos recibidos:", req.body); // Para depuración
+     console.log("Datos recibidos:", req.body); // Para depuración
     // Convertirmos la disponibilidad a un array de objetos
     const disponibilidad = JSON.parse(req.body.disponibilidad);
 
